@@ -14,34 +14,13 @@
         android:textColor="@android:color/black"/>
 
     <Button
-        android:id="@+id/changeButton"
+        android:id="@+id/recordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/randomTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="변경"/>
-
-    <Button
-        android:id="@+id/recordButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/changeButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:text="녹음 시작"/>
-
-    <Button
-        android:id="@+id/stopButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recordButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="녹음 중지"/>
-
-
-
 
 
 </RelativeLayout>

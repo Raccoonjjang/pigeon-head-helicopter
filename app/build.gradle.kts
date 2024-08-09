@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.head"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
     implementation ("net.sourceforge.jexcelapi:jxl:2.6.12")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
