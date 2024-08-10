@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    // Firebase BOM 추가
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -40,13 +41,15 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
     implementation ("net.sourceforge.jexcelapi:jxl:2.6.12")
+    implementation("com.google.android.gms:play-services-tasks:18.2.0")
+    // Firebase 의존성
+    implementation("com.google.firebase:firebase-auth:21.1.0")
+    implementation("com.google.firebase:firebase-firestore:24.4.0")
+    implementation("com.google.firebase:firebase-storage:20.1.0")
 
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.auth)
     implementation(libs.volley)
-    implementation(libs.firebase.firestore)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
 }

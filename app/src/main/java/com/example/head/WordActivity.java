@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.example.head.recode.Recoder;  // Import the Recoder class
-
+import com.example.head.api.ApiService;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -30,6 +30,7 @@ public class WordActivity extends AppCompatActivity {
     private static final String TAG = "WordActivity";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
+    private ApiService apiService;
     private Recoder recoder;  // Declare Recoder instance
 
     private String[] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};

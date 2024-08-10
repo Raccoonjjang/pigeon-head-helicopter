@@ -20,7 +20,7 @@ public class ApiService {
         String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition";
         String accessKey = "533ced8d-b2c2-4482-bc5b-da5d3aad7f24";    // 발급받은 API Key
         String languageCode = "korean ";     // 언어 코드
-        String audioFilePath = "AUDIO_FILE_PATH";  // 녹음된 음성 파일 경로
+        String audioFilePath = "/storage/emulated/0/Android/data/com.example.head/files/myrecording.3gp";  // 녹음된 음성 파일 경로
         String audioContents = null;
 
         Gson gson = new Gson();

@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
         wordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(MainActivity.this, WordActivity.class);
                 startActivity(intent);
             }
         });
+
     }
 }
