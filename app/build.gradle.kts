@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -39,6 +40,11 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
     implementation ("net.sourceforge.jexcelapi:jxl:2.6.12")
+
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+    implementation(libs.volley)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
