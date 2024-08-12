@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText et_register_id, et_register_pw, et_register_age, et_register_nickname;
+    private EditText et_register_id, et_register_pw;
     private Button btn_register_button;
 
     //파이어베이스 초기화
@@ -41,8 +41,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // xml파일에서 선언한 아이디 연결
         et_register_id = findViewById(R.id.et_register_id);
         et_register_pw = findViewById(R.id.et_register_pw);
-        et_register_nickname = findViewById(R.id.et_register_nickname);
-        et_register_age = findViewById(R.id.et_register_age);
 
         btn_register_button = findViewById(R.id.btn_register_button);
 
@@ -54,10 +52,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         final String email = et_register_id.getText().toString().trim();
         final String password = et_register_pw.getText().toString().trim();
-        final String nickname = et_register_nickname.getText().toString().trim();
-        final String age = et_register_age.getText().toString().trim();
 
-        if ((email != null) && !email.isEmpty() && (password != null) && !password.isEmpty() && (nickname != null) && !nickname.isEmpty() && (age != null) && !age.isEmpty() ) {
+        if ((email != null) && !email.isEmpty() && (password != null) && !password.isEmpty()) {
             mAuth.createUserWithEmailAndPassword(et_register_id.getText().toString(), et_register_pw.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -71,9 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 userMap.put(FirebaseID.documentId, user.getUid());
                                 userMap.put(FirebaseID.email, email);
                                 userMap.put(FirebaseID.password, password);
-                                userMap.put(FirebaseID.nickname, nickname);
-                                userMap.put(FirebaseID.age, age);
-                                //현재 유저의 Uid를 이름으로 한 document 생성. 이게 없으면 사용자 컨텐츠의 이륾과 사용자id이름이 달라 사용하기 힘듬
+                                //현재 유저의 Uid를 이름으로 한 document 생성. 이게 없으면 사용자 컨텐츠의 이름과 사용자id이름이 달라 사용하기 힘듬
                                 mStore.collection(FirebaseID.user).document(user.getUid()).set(userMap, SetOptions.merge());
 
                                 //회원가입 성공시 로그인 액티비티로 화면 전환

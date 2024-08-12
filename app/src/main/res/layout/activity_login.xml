@@ -130,11 +130,10 @@
 
     <Button
         android:id="@+id/btn_register"
-        android:layout_width="89dp"
+        android:layout_width="123dp"
         android:layout_height="48dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="76dp"
-        android:layout_marginRight="76dp"
         android:background="#00ff0000"
         android:text="회원가입"
         android:textSize="13dp"
