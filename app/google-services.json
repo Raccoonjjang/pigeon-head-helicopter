@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "142224894023",
+    "project_id": "pigeonemailaccount",
+    "storage_bucket": "pigeonemailaccount.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142224894023:android:9a68f095b3b09838106962",
+        "android_client_info": {
+          "package_name": "com.example.head"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAie0DFPe8qf4DN7AGZC_-vabTPL7yZ0_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
