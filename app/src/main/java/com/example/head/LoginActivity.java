@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.CheckBox;
 
+import com.example.head.recode.PermissionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText et_login_id, et_login_pw;
     private Button btn_login, btn_register;
-
+    private PermissionManager permissionManager;
     private boolean saveLoginData;
     private CheckBox login_chk;
     private SharedPreferences appData;
@@ -32,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        permissionManager = new PermissionManager(this);
+        permissionManager.requestPermissions();
         setContentView(R.layout.activity_login);
 
         appData = getSharedPreferences("appData", MODE_PRIVATE);

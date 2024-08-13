@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 public class ApiService {
 
-    static public void main ( String[] args ) {
+    static public void sendAudioDataToApi(String encodedAudio) {
         String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition";
         String accessKey = "533ced8d-b2c2-4482-bc5b-da5d3aad7f24";    // 발급받은 API Key
         String languageCode = "korean ";     // 언어 코드

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.example.head.recode.AudioRecorderManager;
-import com.example.head.recode.Recoder;  // Import the Recoder class
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -31,11 +30,11 @@ public class WordActivity extends AppCompatActivity {
     private static final String TAG = "WordActivity";
     private AudioRecorderManager audioRecorderManager;
     private Button recordButton;
-    private Recoder recoder;  // Declare Recoder instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        audioRecorderManager = new AudioRecorderManager(this);
         setupUI();
 
     }
@@ -74,8 +73,6 @@ public class WordActivity extends AppCompatActivity {
         randomTextView = findViewById(R.id.randomTextView);
         recordButton = findViewById(R.id.recordButton);
 
-        // Initialize Recoder
-        recoder = new Recoder(this);
         String filePath = this.getExternalFilesDir(null).getAbsolutePath() + "/myrecording.3gp";
 
         // 엑셀 파일에서 데이터를 읽어옵니다.
