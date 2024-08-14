@@ -1,5 +1,4 @@
 package com.example.head.recode;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,10 +10,12 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class FileManager {
 
@@ -28,7 +29,11 @@ public class FileManager {
     public OutputStream createOutputStream() throws IOException {
         ContentResolver resolver = context.getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, "Recording_" + System.currentTimeMillis() + ".pcm");
+
+        // Create a file name based on the current date and time
+        String fileName = generateFileName();
+
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/x-wav");
         values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_MUSIC);
 
@@ -48,17 +53,18 @@ public class FileManager {
                     long fileSize = calculateFileSize(currentFileUri);
                     String message = "Saving complete, URI: " + currentFileUri.toString();
                     new Handler(Looper.getMainLooper()).post(() ->
-                            new Handler(Looper.getMainLooper()).post(() ->
-                                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()));
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show());
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public Context getContext() {
         return context;
     }
+
     public Uri getCurrentFileUri() {
         return currentFileUri;
     }
@@ -71,5 +77,11 @@ public class FileManager {
             }
         }
         return -1; // Return -1 or some other error value if size couldn't be determined
+    }
+
+    private String generateFileName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM_dd_yyyy_HH_mm_ss", Locale.getDefault());
+        String dateTime = sdf.format(new Date());
+        return "Recording_" + dateTime + ".pcm";
     }
 }

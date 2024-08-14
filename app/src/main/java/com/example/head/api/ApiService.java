@@ -1,4 +1,11 @@
 package com.example.head.api;
+
+import android.os.AsyncTask;
+import android.util.Base64;
+import android.util.Log;
+
+import com.google.gson.Gson;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,70 +14,64 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
-
-import com.google.gson.Gson;
 
 public class ApiService {
 
-    static public void sendAudioDataToApi(String encodedAudio) {
-        String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition";
-        String accessKey = "533ced8d-b2c2-4482-bc5b-da5d3aad7f24";    // 발급받은 API Key
-        String languageCode = "korean ";     // 언어 코드
-        String audioFilePath = "/storage/emulated/0/Android/data/com.example.head/files/myrecording.3gp";  // 녹음된 음성 파일 경로
-        String audioContents = null;
+    public static void sendAudioDataToApi(final String base64Audio) {
+        new SendAudioTask().execute(base64Audio);
+    }
 
-        Gson gson = new Gson();
+    private static class SendAudioTask extends AsyncTask<String, Void, Void> {
+        private static final String TAG = "ApiService";
+        private static final String OPEN_API_URL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"; // Use HTTPS
+        private static final String ACCESS_KEY = "533ced8d-b2c2-4482-bc5b-da5d3aad7f24"; // Your API Key
+        private static final String LANGUAGE_CODE = "korean";
 
-        Map<String, Object> request = new HashMap<>();
-        Map<String, String> argument = new HashMap<>();
+        @Override
+        protected Void doInBackground(String... params) {
+            String base64Audio = params[0];
+            Gson gson = new Gson();
+            Map<String, Object> request = new HashMap<>();
+            Map<String, String> argument = new HashMap<>();
 
-        try {
-            Path path = Paths.get(audioFilePath);
-            byte[] audioBytes = Files.readAllBytes(path);
-            audioContents = Base64.getEncoder().encodeToString(audioBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            argument.put("language_code", LANGUAGE_CODE);
+            argument.put("audio", base64Audio);
+            request.put("argument", argument);
 
-        argument.put("language_code", languageCode);
-        argument.put("audio", audioContents);
+            HttpURLConnection con = null;
+            try {
+                URL url = new URL(OPEN_API_URL);
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("POST");
+                con.setDoOutput(true);
+                con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                con.setRequestProperty("Authorization", ACCESS_KEY);
 
-        request.put("argument", argument);
+                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+                wr.write(gson.toJson(request).getBytes("UTF-8"));
+                wr.flush();
+                wr.close();
 
-        URL url;
-        Integer responseCode = null;
-        String responBody = null;
-        try {
-            url = new URL(openApiURL);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setDoOutput(true);
-            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Authorization", accessKey);
+                int responseCode = con.getResponseCode();
+                InputStream is = con.getInputStream();
+                byte[] buffer = new byte[is.available()];
+                int byteRead = is.read(buffer);
+                String responseBody = new String(buffer);
 
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.write(gson.toJson(request).getBytes("UTF-8"));
-            wr.flush();
-            wr.close();
+                Log.i(TAG, "[responseCode] " + responseCode);
+                Log.i(TAG, "[responseBody]");
+                Log.i(TAG, responseBody);
 
-            responseCode = con.getResponseCode();
-            InputStream is = con.getInputStream();
-            byte[] buffer = new byte[is.available()];
-            int byteRead = is.read(buffer);
-            responBody = new String(buffer);
-
-            System.out.println("[responseCode] " + responseCode);
-            System.out.println("[responBody]");
-            System.out.println(responBody);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (con != null) {
+                    con.disconnect();
+                }
+            }
+            return null;
         }
     }
 }

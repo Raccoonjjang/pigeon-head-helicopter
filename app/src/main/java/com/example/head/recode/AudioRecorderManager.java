@@ -9,16 +9,18 @@ import android.net.Uri; // Add this import statement
 import android.util.Log;
 import android.util.Base64;
 
+import com.example.head.api.ApiService;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 public class AudioRecorderManager {
 
-    private static final int SAMPLE_RATE = 44100;
+    private static final int SAMPLE_RATE = 16000;
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final int BUFFER_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
-
+    private ApiService apiService;
     private AudioRecord recorder;
     private Thread recordingThread;
     private boolean isRecording = false;
@@ -73,6 +75,10 @@ public class AudioRecorderManager {
 
             // 녹음 종료 후 파일을 Base64로 인코딩
             String encodedFile = encodeFileToBase64();
+            if (encodedFile != null) {
+                // ApiService로 인코딩된 파일 전달
+                apiService.sendAudioDataToApi(encodedFile);
+            }
             Log.d("AudioRecorderManager", "인코딩된 파일: " + encodedFile);
         }
     }
