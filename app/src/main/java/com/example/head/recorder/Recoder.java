@@ -1,4 +1,4 @@
-package com.example.head.recode;
+package com.example.head.recorder;
 
 import android.content.Context;
 import android.media.MediaRecorder;

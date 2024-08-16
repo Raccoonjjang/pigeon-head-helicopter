@@ -1,14 +1,11 @@
 package com.example.head;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.example.head.recode.AudioRecorderManager;
+import com.example.head.recorder.AudioRecorderManager;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -35,8 +32,13 @@ public class WordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         audioRecorderManager = new AudioRecorderManager(this);
-        setupUI();
 
+        if (audioRecorderManager == null) {
+            Log.e(TAG, "audioRecorderManager is null after initialization");
+        } else {
+            Log.d(TAG, "audioRecorderManager initialized successfully");
+        }
+        setupUI();
     }
     private void readExcel() {
         try {
@@ -81,7 +83,7 @@ public class WordActivity extends AppCompatActivity {
         // 첫 번째 단어를 설정합니다.
 
         recordButton.setOnClickListener(v -> {
-            if (!audioRecorderManager.isRecording()) {
+            if (audioRecorderManager != null && !audioRecorderManager.isRecording()) {
                 audioRecorderManager.startRecording();
                 recordButton.setText("Stop Recording");
                 if (!data.isEmpty()) {
