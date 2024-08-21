@@ -19,27 +19,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_word"
-        android:layout_width="230dp"
-        android:layout_height="48dp"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:text="단어"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        android:layout_marginTop="30dp" />
-
-    <Button
         android:id="@+id/btn_sentence"
         android:layout_width="230dp"
         android:layout_height="48dp"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:text="문장"
         android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@+id/btn_word"
-        app:layout_constraintTop_toBottomOf="@+id/btn_word"
-        app:layout_constraintEnd_toEndOf="@+id/btn_word"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:layout_marginTop="30dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

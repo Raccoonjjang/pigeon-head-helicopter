@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // "단어" 버튼 클릭 시 WordActivity로 이동
-        Button wordButton = findViewById(R.id.btn_word);
+        Button wordButton = findViewById(R.id.btn_sentence);
         wordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

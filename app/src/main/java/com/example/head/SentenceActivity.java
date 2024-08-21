@@ -72,19 +72,20 @@ public class SentenceActivity extends AppCompatActivity implements SpeechRecogni
                 audioRecorderManager.stopRecording(scripts);
                 recordButton.setText("녹음 시작");
                 resultCounter++;
-                if(resultCounter == 6){
+                if(resultCounter == 1){
                     Intent intent = new Intent(SentenceActivity.this, ResultActivity.class);
                     startActivity(intent);
-                }
-                // TextView에 "0/5", "1/5" 이런식으로 표시
-                String resultText = resultCounter + "/5";
-                pView.setText(resultText);
-                if (wordList != null && !wordList.isEmpty()) {
-                    int index = resultCounter % wordList.size(); // 인덱스를 단어 리스트의 크기로 나눈 나머지
-                    String word = wordList.get(index);
-                    wView.setText(word);
                 } else {
-                    wView.setText("단어 없음");
+                    // TextView에 "0/5", "1/5" 이런식으로 표시
+                    String resultText = resultCounter + "/5";
+                    pView.setText(resultText);
+                    if (wordList != null && !wordList.isEmpty()) {
+                        int index = resultCounter % wordList.size(); // 인덱스를 단어 리스트의 크기로 나눈 나머지
+                        String word = wordList.get(index);
+                        wView.setText(word);
+                    } else {
+                        wView.setText("단어 없음");
+                    }
                 }
             }
         });

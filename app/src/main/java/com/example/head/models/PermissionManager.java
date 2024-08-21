@@ -1,5 +1,5 @@
 // PermissionManager.java
-package com.example.head.recorder;
+package com.example.head.models;
 
 import android.Manifest;
 import android.content.pm.PackageManager;

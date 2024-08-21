@@ -95,13 +95,14 @@ public class SpeechRecognition {
                 Toast.makeText(context, "에러 발생 : " + message, Toast.LENGTH_SHORT).show();
             }
             // </editor-fold>
-            // <editor-fold desc="Results부분">
+            // 결과값 반환
             @Override
             public void onResults(Bundle results) {
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matches != null && !matches.isEmpty()) {
                     if (listener != null) {
                         listener.onSpeechRecognized(matches.get(0));
+                        Toast.makeText(context, "한 : " + matches.get(0), Toast.LENGTH_SHORT).show();
                     }
                     button.setText("녹음 중지");
                     //textView.setText(matches.get(0));

@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.CheckBox;
 
-import com.example.head.recorder.PermissionManager;
+import com.example.head.models.PermissionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
