@@ -73,7 +73,7 @@ public class SentenceActivity extends AppCompatActivity implements SpeechRecogni
                 recordButton.setText("녹음 시작");
                 resultCounter++;
                 if(resultCounter == 6){
-                    Intent intent = new Intent(SentenceActivity.this, ScoreActivity.class);
+                    Intent intent = new Intent(SentenceActivity.this, ResultActivity.class);
                     startActivity(intent);
                 }
                 // TextView에 "0/5", "1/5" 이런식으로 표시
