@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PermissionManager {
 
+    // <editor-fold desc="객체생성">
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 201;
     private static final int REQUEST_INTERNET_PERMISSION = 202;
     private AppCompatActivity activity;
-
+    //</editor-fold>
     public PermissionManager(AppCompatActivity activity) {
         this.activity = activity;
     }

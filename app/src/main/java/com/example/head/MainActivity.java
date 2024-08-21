@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, WordActivity.class);
+                Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
                 startActivity(intent);
             }
         });

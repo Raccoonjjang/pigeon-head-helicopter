@@ -1,4 +1,6 @@
-package com.example.head.api;import android.os.AsyncTask;
+package com.example.head.api;
+
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Base64;
 import com.google.gson.Gson;
@@ -14,18 +16,19 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiService {
+public class Pronunciation {
 
-    public static void sendAudioDataToApi(String audioPath) {
-        new SendAudioTask().execute(audioPath);
+    public static void sendAudioDataToApi(String audioPath,String script) {
+        new SendAudioTask().execute(audioPath, script);
     }
-
+    // 비동기화 처리
     private static class SendAudioTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
             String audioFilePath = params[0];
-            String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition";
+            String script = params[1];
+            String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/PronunciationKor";
             String accessKey = "533ced8d-b2c2-4482-bc5b-da5d3aad7f24"; // 발급받은 API Key
             String languageCode = "korean"; // 언어 코드
             String audioContents = null;
@@ -48,6 +51,7 @@ public class ApiService {
 
             argument.put("language_code", languageCode);
             argument.put("audio", audioContents);
+            argument.put("script", script);
             request.put("argument", argument);
 
             URL url;

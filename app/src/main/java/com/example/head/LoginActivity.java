@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // <editor-fold desc="객체생성">
     private EditText et_login_id, et_login_pw;
     private Button btn_login, btn_register;
     private PermissionManager permissionManager;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private String id;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
+    //</editor-fold>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

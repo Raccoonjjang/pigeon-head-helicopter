@@ -1,124 +1,93 @@
 package com.example.head.recorder;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
-import com.example.head.api.ApiService;
-import android.database.Cursor;
-import android.provider.MediaStore;
-import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
+import com.example.head.api.Pronunciation;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 public class AudioRecorderManager {
-    private MediaRecorder mediaRecorder;
+    //<ㄷ
+    private AudioRecord audioRecord;
     private boolean isRecording = false;
-    private Uri fileUri;
+    private int bufferSize;
     private Context context;
-    private ApiService apiService;
-    // 생성자에 Context를 추가합니다.
+    private String filePath;
+    private Pronunciation pronunciation;
+
     public AudioRecorderManager(Context context) {
         this.context = context;
+        bufferSize = AudioRecord.getMinBufferSize(16000,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT);
     }
 
-    // 녹음을 시작하는 메소드입니다.
     public void startRecording() {
-        try {
-            fileUri = createFileUri(); // 녹음 파일의 URI를 생성합니다.
-            setupMediaRecorder(); // MediaRecorder를 설정합니다.
 
-            // 녹음을 준비하고 시작합니다.
-            mediaRecorder.prepare();
-            mediaRecorder.start();
-            isRecording = true; // 녹음 상태를 true로 변경합니다.
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                16000,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize);
+
+        audioRecord.startRecording();
+        isRecording = true;
+
+        // 파일을 저장할 경로를 생성합니다.
+        filePath = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC) + "/recorded_audio.pcm";
+
+        // 녹음 작업을 백그라운드 스레드에서 실행합니다.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                writeAudioDataToFile();
+            }
+        }).start();
+    }
+
+    private void writeAudioDataToFile() {
+        byte[] audioData = new byte[bufferSize];
+        FileOutputStream os = null;
+
+        try {
+            os = new FileOutputStream(filePath);
+
+            while (isRecording) {
+                int read = audioRecord.read(audioData, 0, bufferSize);
+                if (read > 0) {
+                    os.write(audioData, 0, read);
+                }
+            }
+
+            os.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // MediaRecorder를 설정하는 메소드입니다.
-    private void setupMediaRecorder() throws IOException {
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); // 오디오 소스 설정
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); // 출력 형식 설정
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); // 오디오 인코더 설정
+    public void stopRecording(String scripts) {
+        if (audioRecord != null) {
+            isRecording = false;
+            audioRecord.stop();
+            audioRecord.release();
+            audioRecord = null;
+            Log.d("AudioRecorderManager", "File path: " + filePath);
 
-        // ParcelFileDescriptor를 통해 얻은 FileDescriptor를 사용
-        ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(fileUri, "w");
-        if (pfd == null) {
-            throw new IOException("Cannot open file descriptor for URI: " + fileUri);
-        }
-
-        mediaRecorder.setOutputFile(pfd.getFileDescriptor());
-    }
-
-    // MediaStore를 사용하여 녹음 파일의 URI를 생성하는 메소드입니다.
-    private Uri createFileUri() throws IOException {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, createFileName()); // 파일의 이름을 설정합니다.
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/3gpp"); // 파일의 MIME 타입을 설정합니다.
-        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_MUSIC + "/Head"); // 파일의 저장 경로를 설정합니다.
-
-        // 생성된 정보를 바탕으로 파일 URI를 MediaStore에 추가합니다.
-        Uri uri = context.getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
-        if (uri == null) {
-            throw new IOException("Failed to create new MediaStore record.");
-        }
-        return uri;
-    }
-
-    // 현재 시간을 기반으로 파일 이름을 생성하는 메소드입니다.
-    private String createFileName() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        return "REC_" + timeStamp + ".3gpp";
-    }
-
-    // 녹음을 중지하고 MediaRecorder 리소스를 해제하는 메소드입니다.
-    public void stopRecording() {
-        if (mediaRecorder != null) {
-            mediaRecorder.stop(); // 녹음을 중지합니다.
-            mediaRecorder.release(); // MediaRecorder 리소스를 해제합니다.
-            mediaRecorder = null; // MediaRecorder 객체를 null로 설정합니다.
-            isRecording = false; // 녹음 상태를 false로 변경합니다.
-            Log.d("AudioRecorderManager", "File URI: " + fileUri.toString());
-
-            // 파일 경로를 가져와서 ApiService로 전달합니다.
-            String filePath = getFilePathFromUri(fileUri);
-            apiService.sendAudioDataToApi(filePath);
+            // 여기서 ApiService를 호출하여 PCM 파일을 서버로 전송할 수 있습니다.
+            pronunciation.sendAudioDataToApi(filePath, scripts);
         }
     }
 
-    // URI에서 파일 경로를 가져오는 메소드입니다.
-    private String getFilePathFromUri(Uri uri) {
-        String filePath = null;
-        if ("content".equals(uri.getScheme())) {
-            String[] projection = { MediaStore.Audio.Media.DATA };
-            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-            if (cursor != null) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
-                if (cursor.moveToFirst()) {
-                    filePath = cursor.getString(column_index);
-                }
-                cursor.close();
-            }
-        } else if ("file".equals(uri.getScheme())) {
-            filePath = uri.getPath();
-        }
-        return filePath;
-    }
-    // 녹음 중인지 확인하는 메소드입니다.
     public boolean isRecording() {
         return isRecording;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
 }

@@ -26,7 +26,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private EditText et_register_id, et_register_pw;
     private Button btn_register_button;
-
     //파이어베이스 초기화
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mStore = FirebaseFirestore.getInstance();
