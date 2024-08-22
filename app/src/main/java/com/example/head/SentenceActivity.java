@@ -72,7 +72,7 @@ public class SentenceActivity extends AppCompatActivity implements SpeechRecogni
                 audioRecorderManager.stopRecording(scripts);
                 recordButton.setText("녹음 시작");
                 resultCounter++;
-                if(resultCounter == 1){
+                if(resultCounter == 6){
                     Intent intent = new Intent(SentenceActivity.this, ResultActivity.class);
                     startActivity(intent);
                 } else {

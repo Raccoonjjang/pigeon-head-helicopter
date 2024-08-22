@@ -26,16 +26,18 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // "단어" 버튼 클릭 시 WordActivity로 이동
+        // "단어" 버튼 클릭 시 SentenceActivity로 이동
         Button wordButton = findViewById(R.id.btn_sentence);
-        wordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
-                startActivity(intent);
-            }
+        wordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SentenceActivity.class);
+            startActivity(intent);
         });
 
+        // "기록" 버튼 클릭 시 ResultActivity로 이동
+        Button recordButton = findViewById(R.id.btn_girok);
+        recordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ResultActivity.class); // GirokActivity에서 ResultActivity로 변경
+            startActivity(intent);
+        });
     }
 }
